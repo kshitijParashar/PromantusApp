@@ -7,21 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 # from django_filters import rest_framework as filters
 from time import time
 from rest_framework import generics
-"""*********************************for testing*****************************************"""
-# class UserProfileFilter(filters.FilterSet):
-#     age = filters.NumberFilter(field_name="data__age", lookup_expr='gte')
-''#     address = filters.NumberFilter(field_name="data__address", lookup_expr='lte')
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = ['name', 'data']
-#
-# class UserProfileList(generics.ListAPIView):
-#     queryset = UserProfile.objects.all()
-#     serializer_class = UserProfileSerializer
-#     filter_backends = (filters.DjangoFilterBackend,)
-#     filterset_class = UserProfileFilter
-"""**************************************************************************************"""
+
 
 class UserProfileListView(APIView):
     permission_classes = [IsAuthenticated]
@@ -36,8 +22,9 @@ class UserProfileListView(APIView):
         """
         # checking using age fields
         if field_name == "age":
+
             try:
-                resource_item_list = UserProfile.objects.filter(data__age__gte=field_value)
+                resource_item_list = UserProfile.objects.filter(data__age__gte=int(field_value))
                 # print(resource_item_list)
             except UserProfile.DoesNotExist:
                 return Response({'message': 'The User Profile does not exist'}, status=status.HTTP_404_NOT_FOUND)

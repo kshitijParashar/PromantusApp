@@ -1,0 +1,14 @@
+"""*********************************for testing*****************************************"""
+# class UserProfileFilter(filters.FilterSet):
+#     age = filters.NumberFilter(field_name="data__age", lookup_expr='gte')
+''#     address = filters.NumberFilter(field_name="data__address", lookup_expr='lte')
+#
+#     class Meta:
+#         model = UserProfile
+#         fields = ['name', 'data']
+#
+# class UserProfileList(generics.ListAPIView):
+#     queryset = UserProfile.objects.all()
+#     serializer_class = UserProfileSerializer
+#     filter_backends = (filters.DjangoFilterBackend,)
+#     filterset_class = UserProfileFilter
