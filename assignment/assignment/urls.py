@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('promantus.urls'))
+    path('',include('promantus.urls')),
+    path('',include('accounts.urls')),
+    # path('accounts/', include('rest_registration.api.urls')),
 ]

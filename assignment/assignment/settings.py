@@ -50,7 +50,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    # 'rest_registration',
     'promantus.apps.PromantusConfig',
+    'accounts.apps.AccountsConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -64,6 +67,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'assignment.urls'
+AUTH_USER_MODEL = 'accounts.User'
 
 TEMPLATES = [
     {
@@ -97,7 +101,7 @@ WSGI_APPLICATION = 'assignment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test',
+        'NAME': 'test1',
         'USER': 'postgres',
         'PASSWORD': 'shoes@loose',
         'HOST': 'localhost',
