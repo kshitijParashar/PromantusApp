@@ -3,9 +3,12 @@ from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
 # from .models import User
 # from .serializers import UserSerializer
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, ListAPIView
 # from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import mixins
+from .models import User
+from .serializers import UserSerializer
 
 
 
@@ -53,48 +56,49 @@ from rest_framework.permissions import IsAuthenticated
 
 """-----------------------------------mixin classes over here--------------------------------"""
 
-class ResourceCreateAPIView(generics.CreateAPIView):
+class ResourceCreateAPIView(CreateAPIView):
+
 	"""	Used for create-only endpoints.
-		Provides a post method handler."""
-    model = None
-    permission_classes = [permissions.AllowAny, IsAuthenticated]
-    resource_serializer = None
+	Provides a post method handler."""
+	model = User
+	# permission_classes = [permissions.AllowAny, IsAuthenticated]
+	serializer_class = UserSerializer
 
 
-class ResourceDetailView(generics.RetrieveAPIView):
+class ResourceDetailView(RetrieveAPIView):
 	"""	Used for read-only endpoints to represent a single model instance.
-		Provides a get method handler."""
+	Provides a get method handler."""
 	model = None
-    queryset = self.model.objects.all()
-    resource_serializer = None
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 
 
-class ResourceUpdateView(generics.RetrieveUpdateAPIView):
+class ResourceUpdateView(RetrieveUpdateAPIView):
 	"""	Used for update-only endpoints for a single model instance.
-		Provides put and patch method handlers."""
-	model = None
-    queryset = self.model.objects.all()
-    resource_serializer = None
+	Provides put and patch method handlers."""
+	
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 
 
-class ResourceListView(generics.ListAPIView):
+class ResourceListView(ListAPIView):
 	"""	Used for read-write endpoints to represent a collection of model instances.
-		Provides get and post method handlers."""
-	model=None
-    queryset = self.model.objects.all()
-    resource_serializer = None
+	Provides get and post method handlers."""
+	
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 
 
 class ResourceDeleteView(mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
 	"""	Used for delete-only endpoints for a single model instance.
-		Provides a delete method handler.
-		.destroy(request, *args, **kwargs) method, that implements deletion of an existing model instance.
-		If an object is deleted this returns a 204 No Content response, otherwise it will return a 404 Not Found."""
-	model=None
-    queryset = self.model.objects.all()
-    
-    def get(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+	Provides a delete method handler.
+	.destroy(request, *args, **kwargs) method, that implements deletion of an existing model instance.
+	If an object is deleted this returns a 204 No Content response, otherwise it will return a 404 Not Found."""
+	
+	queryset = User.objects.all()
+
+	def get(self, request, *args, **kwargs):
+		return self.destroy(request, *args, **kwargs)
 
 """------------------------------------GenericAPIView ends here-------------------------"""
 
