@@ -1,18 +1,32 @@
 from rest_framework import serializers
-from .models import User
+# from .models import User
+from django.contrib.auth.models import User
+
 
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    first_name=serializers.CharField(max_length=30, required=False, help_text='Optional')
+    last_name=serializers.CharField(max_length=30, required=False, help_text='Optional')
     email = serializers.EmailField(required=False)
     class Meta:
         model = User
-        fields = ('first_name',
-                'last_name',
-                'email',
-                'id',
-                'phone',
-                )
+        # # fields = ('first_name',
+        #         'last_name',
+        #         'email',
+        #         'id',
+        #         'phone',
+                # )
+        fields = [
+                'id'
+                'username', 
+                'first_name', 
+                'last_name', 
+                'email', 
+                'password1', 
+                'password2', 
+            ]
+
         read_only_fields = ('id',)
 
 
@@ -48,3 +62,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         return super().update(instance,validated_data)
+
+# class ProfileSerializer(serializers.ModelSerializer):

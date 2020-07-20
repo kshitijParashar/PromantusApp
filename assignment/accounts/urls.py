@@ -4,6 +4,8 @@ from . models import User
 from . serializers import UserSerializer
 from . resource_api import ResourceAPIView
 from .generic_resource_api import * 
+from .views import SignUpView, ActivateAccount, home
+from .forms import SignupForm
 
 
 
@@ -14,6 +16,9 @@ urlpatterns = [
 	path('api/PUT/registration/<int:pk>', ResourceUpdateView.as_view()),
 	path('api/GET/POST/registration/<int:pk>', ResourceListView.as_view()),
 	# path('api/DELETE/registration/<int:pk>', ResourceDeleteView.as_view()),
-
+    path('signup/', SignUpView.as_view(form_class=SignupForm, template_name='accounts/signup.html'), name='signup'),
+    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+    path('home/', home, name='home')
+]
 	
-	]
+	
