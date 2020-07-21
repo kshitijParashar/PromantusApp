@@ -74,20 +74,20 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'assignment.urls'
 # AUTH_USER_MODEL = 'accounts.MyUser'
 
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'kshitijsharma0684@gmail.com'
-# EMAIL_HOST_PASSWORD = 'Lekha@Amar@1'
-# EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kshitijsharma0684@gmail.com'
+EMAIL_HOST_PASSWORD = 
+EMAIL_PORT = 587
 
 
-if DEBUG:
-    EMAIL_HOST = 'localhost'
-    EMAIL_PORT = 1025
-    EMAIL_HOST_USER = ''
-    EMAIL_HOST_PASSWORD = ''
-    EMAIL_USE_TLS = False
-    DEFAULT_FROM_EMAIL = 'kshitijsharma0684@gmail.com'
+# if DEBUG:
+#     EMAIL_HOST = 'localhost'
+#     EMAIL_PORT = 1025
+#     EMAIL_HOST_USER = ''
+#     EMAIL_HOST_PASSWORD = ''
+#     EMAIL_USE_TLS = False
+#     DEFAULT_FROM_EMAIL = 'kshitijsharma0684@gmail.com'
 
 TEMPLATES = [
     {
