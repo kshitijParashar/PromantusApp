@@ -1,12 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import AbstractUser
 from .user_manager import CustomUserManager
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 # Create your models here.
 
+
+"""for General User Registration"""
 
 # class User(AbstractUser):
 #     """
@@ -26,6 +29,10 @@ from django.dispatch import receiver
 #         return "{}".format(self.email)
 
 
+
+
+"""for User Registration with email verification link using forms and templates"""
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_confirmed = models.BooleanField(default=False)
@@ -35,3 +42,17 @@ def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         instance.profile.save()
+
+
+
+
+"""User Registration with email verification link using authemail"""
+
+# class MyUser(EmailAbstractUser):
+#     # Custom fields
+#     date_of_birth = models.DateField('Date of birth', null=True,
+#         blank=True)
+
+#     # Required
+#     objects = EmailUserManager()
+

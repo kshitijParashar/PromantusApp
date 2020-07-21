@@ -35,7 +35,10 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
 
-    )
+    ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.TokenAuthentication',
+    # )
 }
 
 
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    # 'rest_framework.authtoken',
+    # 'authemail',
     # 'rest_registration',
     'promantus.apps.PromantusConfig',
     'accounts.apps.AccountsConfig',
@@ -60,20 +65,29 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'assignment.urls'
-# AUTH_USER_MODEL = 'accounts.User'
+# AUTH_USER_MODEL = 'accounts.MyUser'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'kshitijsharma0684@gmail.com'
-EMAIL_HOST_PASSWORD = 'Lekha@Amar@1'
-EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'kshitijsharma0684@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Lekha@Amar@1'
+# EMAIL_PORT = 587
+
+
+if DEBUG:
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    DEFAULT_FROM_EMAIL = 'kshitijsharma0684@gmail.com'
 
 TEMPLATES = [
     {

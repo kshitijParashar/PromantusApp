@@ -11,9 +11,9 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.views.generic import View, UpdateView
 from django.contrib import messages
-from .serializers import UserSerializer
+# from .serializers import UserSerializer
 from rest_framework.response import Response
-
+# from django.views.decorators.csrf import csrf_exempt
 
 class ActivateAccount(View):
 	"""User Activation account"""
@@ -25,7 +25,7 @@ class ActivateAccount(View):
 			user = None
 		if user is not None and account_activation_token.check_token(user, token):
 			user.is_active = True
-			user.is_staff = True
+			# user.is_staff = True
 			user.profile.email_confirmed = True
 			user.save()
 			login(request, user)
@@ -34,8 +34,6 @@ class ActivateAccount(View):
 	
 		else:
 			 return HttpResponse('The confirmation link was invalid, possibly because it has already been used.')
-			
-
 
 
 class SignUpView(View):
@@ -49,14 +47,15 @@ class SignUpView(View):
 		form = self.form_class()
 		return render(request, self.template_name, {'form': form})
 		# return Response(serializer.data)
-
+	# @csrf_exempt
 	def post(self, request, *args, **kwargs):
 		form = self.form_class(request.POST)
-# 		# print(form)
+		# print(form)
 		if form.is_valid(): # check form is valid or not if valid save it.
 			user = form.save(commit=False)
 			user.is_active = False # deactivate the user
 			user.save()
+			# print('hello')
 			current_site = get_current_site(request)
 			mail_subject = 'Activate your account.'
 
@@ -67,15 +66,17 @@ class SignUpView(View):
 																					'token':account_activation_token.make_token(user),
 			})
 			to_email = form.cleaned_data.get('email')
+			# print('hello2')
 			
 			email = EmailMessage(
 						mail_subject, message, to=[to_email]
 			)
 	
 			email.send()
-			# return HttpResponse('Please confirm your email address to complete the registration')
-			# messages.success(request, ('Please confirm your email address to complete the registration.'))
 			return redirect('home')
+		return render(request, self.template_name, {'form': form})
+			
+		
 	
 
 
