@@ -14,6 +14,8 @@ from django.contrib import messages
 # from .serializers import UserSerializer
 from rest_framework.response import Response
 # from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+import smtplib 
 
 class ActivateAccount(View):
 	"""User Activation account"""
@@ -25,7 +27,7 @@ class ActivateAccount(View):
 			user = None
 		if user is not None and account_activation_token.check_token(user, token):
 			user.is_active = True
-			# user.is_staff = True
+			user.is_staff = True
 			user.profile.email_confirmed = True
 			user.save()
 			login(request, user)
@@ -56,6 +58,7 @@ class SignUpView(View):
 			user.is_active = False # deactivate the user
 			user.save()
 			# print('hello')
+			mailServer = smtplib.SMTP('smtp.gmail.com' , 587)
 			current_site = get_current_site(request)
 			mail_subject = 'Activate your account.'
 
@@ -71,9 +74,24 @@ class SignUpView(View):
 			email = EmailMessage(
 						mail_subject, message, to=[to_email]
 			)
+			# send_mail(
+			# 		    subject=mail_subject,
+			# 		    message=message,
+			# 		    from_email='test.promantus@gmail.com',
+			# 		    recipient_list=[to_email],
+			# 		    fail_silently=False,
+			# 		)
+
+
+			mailServer = smtplib.SMTP('smtp.gmail.com' , 587)
+			mailServer.starttls()
+			mailServer.login('from_your@gmail.com' , '********')
+			mailServer.sendmail('from_your@gmail.com', [to_email] , message)
+			print(" \n Sent!")
+			mailServer.quit()
 	
-			email.send()
-			return redirect('home')
+			# email.send()
+			return render(request, 'accounts/home.html')
 		return render(request, self.template_name, {'form': form})
 			
 		
