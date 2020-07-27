@@ -36,7 +36,7 @@ class ActivateAccount(View):
 			user.is_staff = True
 			user.profile.email_confirmed = True
 			user.save()
-			# request.session.flush()
+			request.session.flush()
 			login(request, user)
 			return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
 			# messages.sucess(request, ('Thank you for your email confirmation. Now you can login your account.'))
@@ -95,7 +95,7 @@ class SignUpView(View):
 			message = 'Subject: {}\n\n{}'.format(mail_subject, message)
 			mailServer = smtplib.SMTP('smtp.gmail.com' , 587)
 			mailServer.starttls()
-			mailServer.login('test.promantus@gmail.com' , 'kshitij@123')
+			mailServer.login('from_your@gmail.com' ,'*********')
 			mailServer.sendmail('from_your@gmail.com', [to_email] , message)
 			print(" \n Sent!")
 			mailServer.quit()
