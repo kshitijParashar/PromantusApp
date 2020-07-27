@@ -25,10 +25,19 @@ SECRET_KEY = '!%l_6x0=6)p1xgb*!#011d5cg)#wr-_uhz7vn5&7bj%b(&1yvs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-"""configure ALLOWED_HOSTS to allow multiple hosts (don't do that in production!):"""
+"""
+configure ALLOWED_HOSTS to allow multiple hosts (don't do that in production!):
+test cases at cmd: 
+1. curl -v -H "Host:www.example-A.com" http://127.0.0.1:8000/
+1. curl -v -H "Host:www.example-B.com" http://127.0.0.1:8000/
+1. curl -v -H "Host:www.example-C.com" http://127.0.0.1:8000/
+1. curl -v -H "Host:www.example-D.com" http://127.0.0.1:8000/
+1. curl -v -H "Host:www.example-E.com" http://127.0.0.1:8000/
 
-ALLOWED_HOSTS = ["www.example-A.com", 'www.example-B.com','www.example-C.com','127.0.0.1']
-# ALLOWED_HOSTS = ["*"]
+"""
+
+ALLOWED_HOSTS = ["www.example-A.com", 'www.example-B.com','www.example-C.com','127.0.0.1'] # allowed only for these 
+# ALLOWED_HOSTS = ["*"] # for all
 
 REST_FRAMEWORK = {
 
