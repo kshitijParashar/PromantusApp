@@ -25,7 +25,10 @@ SECRET_KEY = '!%l_6x0=6)p1xgb*!#011d5cg)#wr-_uhz7vn5&7bj%b(&1yvs'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+"""configure ALLOWED_HOSTS to allow multiple hosts (don't do that in production!):"""
+
+ALLOWED_HOSTS = ["www.example-A.com", 'www.example-B.com','www.example-C.com','127.0.0.1']
+# ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
 
@@ -38,6 +41,11 @@ REST_FRAMEWORK = {
     ),
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.TokenAuthentication',
+    # )
+
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     # )
 }
 
