@@ -7,8 +7,8 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpda
 # from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import mixins
-from .models import User
-from .serializers import UserSerializer
+from accounts.models import User
+from accounts.serializers import UserSerializer
 
 
 

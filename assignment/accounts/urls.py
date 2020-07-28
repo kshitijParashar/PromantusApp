@@ -1,9 +1,9 @@
 
 from django.urls import path
-from . models import User
-from . serializers import UserSerializer
-from . resource_api import ResourceAPIView
-from .generic_resource_api import * 
+from accounts.models import User
+from accounts.serializers import UserSerializer
+from accounts.apis.resource_api import ResourceAPIView
+from accounts.apis.generic_resource_api import * 
 from .views import SignUpView, ActivateAccount
 from .forms import SignupForm
 

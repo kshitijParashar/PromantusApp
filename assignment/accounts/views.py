@@ -82,11 +82,11 @@ class SignUpView(View):
 			# 		    fail_silently=False,
 			# 		)
 
-
+			message = 'Subject: {}\n\n{}'.format(mail_subject, message)
 			mailServer = smtplib.SMTP('smtp.gmail.com' , 587)
 			mailServer.starttls()
-			mailServer.login('from_your@gmail.com' , '********')
-			mailServer.sendmail('from_your@gmail.com', [to_email] , message)
+			mailServer.login('test.promantus@gmail.com' , 'kshitij@123')
+			mailServer.sendmail('test.promantus@gmail.com', [to_email] , message)
 			print(" \n Sent!")
 			mailServer.quit()
 	
