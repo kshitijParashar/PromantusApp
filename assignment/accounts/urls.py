@@ -1,19 +1,28 @@
 
 from django.urls import path
-<<<<<<< HEAD
+
 from accounts.models import User
 from accounts.serializers import UserSerializer
 from accounts.apis.resource_api import ResourceAPIView
 from accounts.apis.generic_resource_api import * 
-from .views import SignUpView, ActivateAccount
-=======
-from . models import User
-from . serializers import UserSerializer
-from . resource_api import ResourceAPIView
-from .generic_resource_api import * 
-from .views import SignUpView, ActivateAccount, home,cookie_session, cookie_delete
->>>>>>> 872b6b41ed691fbbfa063fbf755f47b00333456e
-from .forms import SignupForm
+# from accounts.views import SignUpView, ActivateAccount
+
+from accounts.models import User
+from accounts.serializers import UserSerializer #LoginSerializer
+from accounts.apis.resource_api import ResourceAPIView
+from accounts.apis.generic_resource_api import * 
+from accounts.views import (
+	SignUpView, 
+	ActivateAccount, 
+	home,
+	cookie_session, 
+	cookie_delete,
+	LoginView,
+	LogoutView,
+	Userdetails
+	)
+
+from accounts.forms import SignupForm
 
 
 
@@ -21,11 +30,11 @@ urlpatterns = [
 
 # ----------------for simple registration----------------------------------
 
-	path('api/registration/<int:pk>', ResourceAPIView.as_view(model=User,resource_serializer=UserSerializer)),
-	path('api/POST/registration/', ResourceCreateAPIView.as_view()),
-	path('api/GET/registration/<int:pk>', ResourceDetailView.as_view()),
-	path('api/PUT/registration/<int:pk>', ResourceUpdateView.as_view()),
-	path('api/GET/POST/registration/<int:pk>', ResourceListView.as_view()),
+	# path('api/registration/<int:pk>', ResourceAPIView.as_view(model=User,resource_serializer=UserSerializer)),
+	# path('api/POST/registration/', ResourceCreateAPIView.as_view()),
+	# path('api/GET/registration/<int:pk>', ResourceDetailView.as_view()),
+	# path('api/PUT/registration/<int:pk>', ResourceUpdateView.as_view()),
+	# path('api/GET/POST/registration/<int:pk>', ResourceListView.as_view()),
 	# path('api/DELETE/registration/<int:pk>', ResourceDeleteView.as_view()),
 
 	#-------------for signup with email verification link--------------------
@@ -34,6 +43,8 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('home/', home, name='home'),
 
+#   -----------for api testing on authentication---------------------
+    path('user/<int:pk>', Userdetails.as_view())
 
     # --------------------for testing cookies and session only----------------
 #     path('testcookie/', cookie_session),

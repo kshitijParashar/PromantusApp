@@ -36,7 +36,7 @@ test cases at cmd:
 
 """
 
-ALLOWED_HOSTS = ["www.example-A.com", 'www.example-B.com','www.example-C.com','127.0.0.1'] # allowed only for these 
+ALLOWED_HOSTS = ["example-A.com", 'www.example-B.com','www.example-C.com','127.0.0.1'] # allowed only for these 
 # ALLOWED_HOSTS = ["*"] # for all
 
 REST_FRAMEWORK = {
@@ -70,7 +70,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
+    'django_extensions',
     # 'authemail',
     # 'rest_registration',
     'promantus.apps.PromantusConfig',

@@ -1,5 +1,5 @@
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -19,6 +19,24 @@ from rest_framework.response import Response
 from django.core.mail import send_mail
 import smtplib 
 from django.contrib import sessions
+from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
+from accounts.serializers import UserSerializer
+
+
+#------------API fot testing---------------
+
+class Userdetails(APIView):
+	authentication_classes= [TokenAuthentication, SessionAuthentication, BasicAuthentication]
+
+	def get(self, request, pk):
+		queryset=User.objects.get(id=pk)
+		serializer=UserSerializer(queryset)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+"""------------------------------------For User registeration and  activatation----------------"""
 
 class ActivateAccount(View):
 	"""User Activation account"""
@@ -95,22 +113,17 @@ class SignUpView(View):
 			message = 'Subject: {}\n\n{}'.format(mail_subject, message)
 			mailServer = smtplib.SMTP('smtp.gmail.com' , 587)
 			mailServer.starttls()
-<<<<<<< HEAD
+
 			mailServer.login('test.promantus@gmail.com' , 'kshitij@123')
 			mailServer.sendmail('test.promantus@gmail.com', [to_email] , message)
-=======
 			mailServer.login('from_your@gmail.com' ,'*********')
 			mailServer.sendmail('from_your@gmail.com', [to_email] , message)
->>>>>>> 872b6b41ed691fbbfa063fbf755f47b00333456e
 			print(" \n Sent!")
 			mailServer.quit()
-	
 			# email.send()
 			return render(request, 'accounts/home.html')
 		return render(request, self.template_name, {'form': form})
-			
-		
-	
+
 
 
 def home(request):
@@ -129,5 +142,32 @@ def cookie_delete(request):
     return response
 
 
+"""---------------Session Login with authtoken------------------"""
+
+from rest_framework.views import APIView
+from accounts.serializers import LoginSerializer
+from django.contrib.auth import login as django_login, logout as django_logout
+from rest_framework.authtoken.models import Token
+from rest_framework import status, permissions
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+
+class LoginView(APIView):
+	# permission_classes=[IsAuthenticated,AllowAny]
+	serializer_class = LoginSerializer
+
+	def post(self, request):
+		serializer = self.serializer_class(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		user = serializer.validated_data["user"]
+		django_login(request, user) # ----------session Login 
+		token, created = Token.objects.get_or_create(user=user)
+		return Response({"token": token.key}, status=200)
 
 
+class LogoutView(APIView):
+	# permission_classes=[IsAuthenticated,AllowAny]
+	authentication_classes = (SessionAuthentication , TokenAuthentication, )
+	def post(self, request):
+		django_logout(request) #--------Session Logout
+		return Response(status=204)
+		

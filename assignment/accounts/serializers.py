@@ -1,11 +1,12 @@
 from rest_framework import serializers
 # from .models import User
 from django.contrib.auth.models import User
+from accounts.models import Profile
 
 
 
 class UserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
+    # id = serializers.IntegerField(required=False)
     first_name=serializers.CharField(max_length=30, required=False, help_text='Optional')
     last_name=serializers.CharField(max_length=30, required=False, help_text='Optional')
     email = serializers.EmailField(required=False)
@@ -18,13 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
         #         'phone',
                 # )
         fields = [
-                'id'
+                'id',
                 'username', 
                 'first_name', 
                 'last_name', 
                 'email', 
-                'password1', 
-                'password2', 
+                # 'password1', 
+                # 'password2', 
             ]
 
         read_only_fields = ('id',)
@@ -64,3 +65,38 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(instance,validated_data)
 
 # class ProfileSerializer(serializers.ModelSerializer):
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Profile
+        fields=('username', 'email', 'is_active', 'is_staff')
+"""---------------------------Login Serializer-------------------------------------"""
+
+from django.contrib.auth import authenticate
+from rest_framework import exceptions
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        username = data.get("username", "")
+        password = data.get("password", "")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    data["user"] = user
+                else:
+                    msg = "User is deactivated."
+                    raise exceptions.ValidationError(msg)
+            else:
+                msg = "Unable to login with given credentials."
+                raise exceptions.ValidationError(msg)
+        else:
+            msg = "Must provide username and password both."
+            raise exceptions.ValidationError(msg)
+        return data
+
