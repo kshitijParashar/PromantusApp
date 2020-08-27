@@ -22,17 +22,37 @@ from django.contrib import sessions
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
 from accounts.serializers import UserSerializer
+from authapp.backends import JWTAuthentication
+# from rest_framework_api_key.permissions import HasAPIKey
+# from rest_framework_api_key.models import APIKey
+from django.views.generic import TemplateView
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework import status, permissions
+
+
 
 
 #------------API fot testing---------------
 
-class Userdetails(APIView):
-	authentication_classes= [TokenAuthentication, SessionAuthentication, BasicAuthentication]
+class Userdetails(APIView, TemplateView):
+	authentication_classes= [JWTAuthentication, SessionAuthentication]
+	permission_classes = [AllowAny, IsAuthenticated]
+	# template_name = "authlogin/userinfo.html"
+	# renderer_classes = [TemplateHTMLRenderer]
 
-	def get(self, request, pk):
-		queryset=User.objects.get(id=pk)
-		serializer=UserSerializer(queryset)
-		return Response(serializer.data, status=status.HTTP_200_OK)
+	def get(self, request,pk):
+		print(request.session.session_key)
+		# api_key, key = APIKey.objects.create_key(name='User-{}-Key'.format(pk))
+		# print(request.session['id'])
+		# key = request.META["HTTP_AUTHORIZATION"]
+		# api_key = APIKey.objects.get_from_key(key)
+		# key=rest_framework_api_key.objects.get()
+		user = User.objects.get(id=pk)
+		# queryset=User.objects.get(id=pk)
+		
+		serializer=UserSerializer(user)
+		return Response({'data':serializer.data}, status=status.HTTP_200_OK)
+		# return "API Successfully returning"
 
 
 
@@ -139,35 +159,36 @@ def cookie_delete(request):
         response = HttpResponse("dataflair<br> cookie createed")
     else:
         response = HttpResponse("Dataflair <br> Your browser doesnot accept cookies")
-    return response
+    # return response
 
 
 """---------------Session Login with authtoken------------------"""
 
-from rest_framework.views import APIView
-from accounts.serializers import LoginSerializer
-from django.contrib.auth import login as django_login, logout as django_logout
-from rest_framework.authtoken.models import Token
-from rest_framework import status, permissions
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+# from rest_framework.views import APIView
+# from accounts.serializers import LoginSerializer
+# from django.contrib.auth import login as django_login, logout as django_logout
+# from rest_framework.authtoken.models import Token
+# from rest_framework import status, permissions
+# from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
-class LoginView(APIView):
-	# permission_classes=[IsAuthenticated,AllowAny]
-	serializer_class = LoginSerializer
+# class LoginView(APIView):
+# 	permission_classes=[AllowAny]
+# 	serializer_class = LoginSerializer
 
-	def post(self, request):
-		serializer = self.serializer_class(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		user = serializer.validated_data["user"]
-		django_login(request, user) # ----------session Login 
-		token, created = Token.objects.get_or_create(user=user)
-		return Response({"token": token.key}, status=200)
+# 	def post(self, request):
+# 		serializer = self.serializer_class(data=request.data)
+# 		serializer.is_valid(raise_exception=True)
+# 		user = serializer.validated_data["user"]
+# 		django_login(request, user) # ----------session Login 
+# 		session_id=request.session.session_key
+# 		token, created = Token.objects.get_or_create(user=user)
+# 		return Response({"token": token.key, 'sessionid':session_id}, status=200)
 
 
-class LogoutView(APIView):
-	# permission_classes=[IsAuthenticated,AllowAny]
-	authentication_classes = (SessionAuthentication , TokenAuthentication, )
-	def post(self, request):
-		django_logout(request) #--------Session Logout
-		return Response(status=204)
+# class LogoutView(APIView):
+# 	# permission_classes=[IsAuthenticated,AllowAny]
+# 	# authentication_classes = (SessionAuthentication , TokenAuthentication, )
+# 	def post(self, request):
+# 		django_logout(request) #--------Session Logout
+# 		return Response(status=204)
 		

@@ -17,8 +17,8 @@ from accounts.views import (
 	home,
 	cookie_session, 
 	cookie_delete,
-	LoginView,
-	LogoutView,
+	# LoginView,
+	# LogoutView,
 	Userdetails
 	)
 
@@ -44,7 +44,7 @@ urlpatterns = [
     path('home/', home, name='home'),
 
 #   -----------for api testing on authentication---------------------
-    path('user/<int:pk>', Userdetails.as_view())
+    path('user/<int:pk>', Userdetails.as_view(), name="userinfo")
 
     # --------------------for testing cookies and session only----------------
 #     path('testcookie/', cookie_session),

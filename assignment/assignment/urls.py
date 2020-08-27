@@ -15,13 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import LoginView, LogoutView
+# from accounts.views import LoginView, LogoutView
+# from rest_framework.permissions import IsAuthenticated, AllowAny
+# permission_classes= (AllowAny,)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('promantus.urls')),
     path('api/accounts/',include('accounts.urls')),
-    path('api/accounts/auth/login',LoginView.as_view(), name='login'), # Session Login url
-    path('api/accounts/auth/logout',LogoutView.as_view(), name='logout'), #session Logout url
+    path('api/auth/',include('authapp.urls')),
+    # path('api/accounts/auth/login',LoginView.as_view(), name='login'), # Session Login url
+    # path('api/accounts/auth/logout',LogoutView.as_view(), name='logout'), #session Logout url
     
     # path('accounts/', include('rest_registration.api.urls')),
 ]

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#login-btn").click(function(){
+     alert("username:"+$("#loginusername").val())
+     alert ("password:"+$("#loginpassword").val())
+      $.post("http://127.0.0.1:8000/api/auth/login",
+    {
+      username: $("#loginusername").val(),
+      password: $("#loginpassword").val()
+    },
+    function(postdata,status){
+      alert("Data: " + postdata + "\nStatus: " + status);
+      $.ajax({url: "http://127.0.0.1:8000/api/auth/login/userinfo/1" , 
+      	      headers:{"Authorization": 'Bearer '+ postdata.token ,
+      	      "Set-Cookie":"SessionId="+ postdata.sessionid, "Path": /, 'HttpOnly': ture
+      	      },       
+	      method: 'GET',
+	      success: function(data){	     
+	      alert("success: " +data );
+      }
+    
+  });
+      
+
+    });
+  });
+
+  $("#logout-btn").click(function(){
+     alert("username:"+$("#loginusername").val())
+     alert ("password:"+$("#loginpassword").val())
+      $.post( "http://127.0.0.1:8000/api/auth/logout",
+    	{
+	    	headers:{"Authorization": 'Bearer '+ postdata.token },
+	    	method: 'POST'
+    	},
+    function(postdata,status){
+      alert("Data: " + postdata + "\nStatus: " + status);
+      $.ajax({url: "http://127.0.0.1:8000/api/accounts/user/1" , 
+	      headers:{"Authorization": 'Bearer '+ postdata.token },       
+	      method: 'GET',
+	      success: function(data){	     
+	      alert("success: " +data );
+      }
+    
+  });
+      
+
+    
+    });
+  });
+  })
+
+</script>
+</head>
+<div id="first">
+            <form action="" method="post">
+                <input type="text" id="loginusername" placeholder="Username" />
+                <input type="password" id="loginpassword" placeholder="Password" />
+                <input type="button" id="login-btn" value="Sign In" />
+                <input type="button" id="logout-btn" value="Sign Out" />
+                
+            </form>
+        </div>
+
+</html>
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>User Login Page</title>
+        <body>
+        	
+			 <ul>
+    
+                <li>
+                    
+                    Welcome {{ data.username }}!!!
+                        <p>
+                            <ul>
+                                Email : {{ data.email}}
+                            </ul>
+                        </p>
+                </li>
+            </ul>
+
+       		<p><a href="/admin/logout/">logout</a></p>
+    		
+        	<p>if You are not logged in</p>
+        	<p><a href="{% url 'login' %}">login</a></p>
+
+    	</body>
+</html>

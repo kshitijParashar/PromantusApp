@@ -43,6 +43,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        'rest_framework_api_key.permissions.HasAPIKey', # The HasAPIKey permission class protects a view behind API key authorization
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -52,10 +53,11 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.TokenAuthentication',
     # )
 
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authapp.backends.JWTAuthentication',
     #     'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
-    # )
+    )
 }
 
 
@@ -69,9 +71,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_api_key',# Add the API Key app then apply migrations using migrate command in terminal
     'django_filters',
     'rest_framework.authtoken',
+    'authapp.apps.AuthappConfig',
     'django_extensions',
+    'corsheaders',
     # 'authemail',
     # 'rest_registration',
     'promantus.apps.PromantusConfig',
@@ -82,6 +87,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -91,6 +97,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'assignment.urls'
 # AUTH_USER_MODEL = 'accounts.MyUser'
+CORS_ORIGIN_ALLOW_ALL= True
+# SESSION_ENGINE = 'redis_sessions.session'
+# Access-Control-Allow-Origin = 
+# Access-Control-Allow-Credentials : True
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -98,6 +108,9 @@ EMAIL_HOST_USER = 'from_email@gmail.com'
 EMAIL_HOST_PASSWORD = "********"
 EMAIL_PORT = 587, 
 
+
+# LOGIN_REDIRECT_URL = "userinfo"
+# LOGOUT_REDIRECT_URL = ""
 
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = 1025
@@ -168,9 +181,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+"""--------RSA Key Generator for Public and Private key------------------"""
+from Crypto.PublicKey import RSA
+
+RSAkey = RSA.generate(1024)
+
+# JWT
+# JWT_SECRET_KEY = "JWT_SECRET_KEYJWT_SECRET_KEYJWT_SECRET_KEYJWT_SECRET_KEY"
+JWT_SECRET_KEY = {
+        "private_key":RSAkey.exportKey(),
+        "public_key": RSAkey.publickey().exportKey()
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+"""set the API_KEY_CUSTOM_HEADER setting to a non-None value to require clients to pass 
+their API key in a custom header instead of the Authorization header."""
+
+API_KEY_CUSTOM_HEADER = None
 
 LANGUAGE_CODE = 'en-us'
 
